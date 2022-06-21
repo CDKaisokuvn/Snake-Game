@@ -2,7 +2,7 @@ import pygame
 from pygame.sprite import Sprite
 
 
-class Food():
+class Food(Sprite):
     """Food class"""
 
     def __init__(self, snake_game):

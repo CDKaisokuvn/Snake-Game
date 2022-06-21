@@ -36,6 +36,7 @@ class SnakeGame():
             self._update_snake_movement()
             # Use sleep to control the movements of each segment
             sleep(0.07)
+
             # Move the first segment
             self.first_segment.move()
             self._update_screen()
@@ -107,8 +108,28 @@ class SnakeGame():
         for segment in self.snake.sprites():
             segment.draw_segments()
         self._update_food()
-        pygame.display.update()
-        # pygame.display.flip()
+        self._eat_food()
+        # pygame.display.update()
+        pygame.display.flip()
+
+    def _eat_food(self):
+        """Detect collision between the first segment and food"""
+        has_collision = pygame.sprite.collide_rect(
+            self.food, self.first_segment)
+
+        if has_collision:
+            # Reset food position.
+            self.food.is_exist = False
+
+            # Add a new segment to the snake.
+            segment = Snake(self)
+            segment1_centerx = self.first_segment.rect.centerx
+            segment1_centery = self.first_segment.rect.centery
+            segment.rect.centerx = segment1_centerx
+            segment.rect.centery = segment1_centery
+            self.snake.add(segment)
+            
+            #TODO: Update Score
 
 
 if __name__ == '__main__':
