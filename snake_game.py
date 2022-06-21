@@ -2,10 +2,13 @@ from tkinter import Y
 import pygame
 import sys
 from time import sleep
+from random import randint
+
 from settings import Settings
 from snake import Snake
 from food import Food
-from random import randint
+from game_stats import GameStats
+from scoreboard import ScoreBoard
 
 
 class SnakeGame():
@@ -26,19 +29,23 @@ class SnakeGame():
 
         self._initialize_snake()
         self.food = Food(self)
+        self.game_stats = GameStats(self)
+        self.score_board = ScoreBoard(self)
 
     def run_game(self):
         """Start the main loop for the game"""
         while True:
             self._check_key_events()
+            if self.game_stats.game_active:
 
-            # Move the last segments before the first one
-            self._update_snake_movement()
+                # Move the last segments before the first one
+                self._update_snake_movement()
             # Use sleep to control the movements of each segment
-            sleep(0.07)
+                sleep(0.07)
 
             # Move the first segment
-            self.first_segment.move()
+                self.first_segment.move()
+                self.score_board.prep_scoreboard()
             self._update_screen()
 
     def _check_key_events(self):
@@ -55,18 +62,22 @@ class SnakeGame():
                 if event.key == pygame.K_DOWN and not self.first_segment.moving_up:
                     self.first_segment.reset_movement_state()
                     self.first_segment.moving_down = True
+                    self.game_stats.game_active = True
 
                 elif event.key == pygame.K_UP and not self.first_segment.moving_down:
                     self.first_segment.reset_movement_state()
                     self.first_segment.moving_up = True
+                    self.game_stats.game_active = True
 
                 elif event.key == pygame.K_LEFT and not self.first_segment.moving_right:
                     self.first_segment.reset_movement_state()
                     self.first_segment.moving_left = True
+                    self.game_stats.game_active = True
 
                 elif event.key == pygame.K_RIGHT and not self.first_segment.moving_left:
                     self.first_segment.reset_movement_state()
                     self.first_segment.moving_right = True
+                    self.game_stats.game_active = True
 
     def _initialize_snake(self):
         """Create 3 segments for the snake and"""
@@ -109,8 +120,13 @@ class SnakeGame():
             segment.draw_segments()
         self._update_food()
         self._eat_food()
+        self.score_board.draw_score()
         # pygame.display.update()
         pygame.display.flip()
+
+    def _update_score(self):
+        self.game_stats.score += 1
+        print(self.game_stats.score)
 
     def _eat_food(self):
         """Detect collision between the first segment and food"""
@@ -128,8 +144,9 @@ class SnakeGame():
             segment.rect.centerx = segment1_centerx
             segment.rect.centery = segment1_centery
             self.snake.add(segment)
-            
-            #TODO: Update Score
+
+            # Update Score
+            self._update_score()
 
 
 if __name__ == '__main__':
