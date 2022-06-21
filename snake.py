@@ -36,16 +36,16 @@ class Snake(Sprite):
         """Move first segment"""
         self.x = float(self.rect.centerx)
         self.y = float(self.rect.centery)
-        if self.moving_down and self.rect.bottom < self.screen_rect.bottom-20:
+        if self.moving_down and self.rect.bottom < self.screen_rect.bottom - 10:
             self.y += self.settings.snake_speed
 
-        if self.moving_left and self.rect.left > 20:
+        if self.moving_left and self.rect.left > 10:
 
             self.x -= self.settings.snake_speed
-        if self.moving_up and self.rect.top > 20:
+        if self.moving_up and self.rect.top > 10:
 
             self.y -= self.settings.snake_speed
-        if self.moving_right and self.rect.right < self.screen_rect.right - 20:
+        if self.moving_right and self.rect.right < self.screen_rect.right - 10:
 
             self.x += self.settings.snake_speed
 

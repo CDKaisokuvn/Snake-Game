@@ -1,4 +1,3 @@
-from tkinter import Y
 import pygame
 import sys
 from time import sleep
@@ -42,10 +41,11 @@ class SnakeGame():
                 self._update_snake_movement()
             # Use sleep to control the movements of each segment
                 sleep(0.07)
-
             # Move the first segment
                 self.first_segment.move()
+                self._game_over()
                 self.score_board.prep_scoreboard()
+                self.score_board.prep_best_score()
             self._update_screen()
 
     def _check_key_events(self):
@@ -103,8 +103,10 @@ class SnakeGame():
 
         for i in range(len(segments)):
             if i < len(segments) - 1:
-                segments[i].rect.centerx = segments[i+1].rect.centerx
-                segments[i].rect.centery = segments[i+1].rect.centery
+                segment_centerx = segments[i+1].rect.centerx
+                segment_centery = segments[i+1].rect.centery
+                segments[i].rect.centerx = segment_centerx
+                segments[i].rect.centery = segment_centery
 
     def _update_food(self):
         """Random a position for food"""
@@ -147,6 +149,38 @@ class SnakeGame():
 
             # Update Score
             self._update_score()
+
+    # TODO: Game over
+    def _game_over(self):
+        # Collision with the border
+        has_collision_borders = self._has_collision_borders()
+
+        # Collision with the segments
+
+        has_collision_segments = self._has_collision_segments()
+
+        # TODO: Game over
+        if has_collision_borders or has_collision_segments:
+            self.game_stats.game_active = False
+            self.game_stats._update_best_score()
+            self.snake.empty()
+            self._initialize_snake()
+            self.game_stats.reset_stats()
+            self._update_food()
+
+    def _has_collision_borders(self):
+        """Detect the collision between the first segment and the border"""
+        if self.first_segment.rect.centerx <= 10 or self.first_segment.rect.centery <= 10 or self.first_segment.rect.centerx >= self.screen_rect.right-10 or self.first_segment.rect.centery >= self.screen_rect.bottom - 10:
+            return True
+
+        return False
+
+    def _has_collision_segments(self):
+        segments = self.snake.copy().sprites()
+        segments.remove(self.first_segment)
+        if pygame.sprite.spritecollideany(self.first_segment, segments):
+            return True
+        return False
 
 
 if __name__ == '__main__':
