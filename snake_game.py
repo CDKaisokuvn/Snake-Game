@@ -109,8 +109,8 @@ class SnakeGame():
     def _update_food(self):
         """Random a position for food"""
         if not self.food.is_exist:
-            self.food.x = randint(10, self.screen_rect.width)
-            self.food.y = randint(10, self.screen_rect.height)
+            self.food.x = randint(10, self.screen_rect.width - 10)
+            self.food.y = randint(10, self.screen_rect.height - 10)
         self.food.draw_food()
 
     def _update_screen(self):
