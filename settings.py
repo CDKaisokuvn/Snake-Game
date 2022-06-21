@@ -15,4 +15,5 @@ class Settings:
         self.segment_width = 20
         self.segment_height = 20
         self.segment_color = (255,255,255)
+        self.snake_speed = 20
         
