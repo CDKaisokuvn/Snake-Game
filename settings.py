@@ -1,3 +1,6 @@
+from turtle import width
+
+
 class Settings:
 
     """Parameters of the game"""
@@ -7,3 +10,9 @@ class Settings:
         self.screen_height = 600
 
         self.bg_color = (0,0,0)
+
+        #Snake segment
+        self.segment_width = 20
+        self.segment_height = 20
+        self.segment_color = (255,255,255)
+        
