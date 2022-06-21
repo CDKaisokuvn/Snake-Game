@@ -10,8 +10,7 @@ class GameStats:
     def reset_stats(self):
         """Initialize statistics that can change during game."""
         self.score = 0
-        
-        
+        self.level = 1
 
     def _get_best_score(self):
         with open('score.txt', 'r') as f:

@@ -13,8 +13,9 @@ class Food(Sprite):
         self.is_exist = False
         self.x = 0
         self.y = 0
+        self.color = (225, 225, 225)
 
     def draw_food(self):
         self.rect = pygame.draw.circle(
-            self.screen, (255, 255, 255), (self.x, self.y), 10)
+            self.screen, self.color, (self.x, self.y), 10)
         self.is_exist = True

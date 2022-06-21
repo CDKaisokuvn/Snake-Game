@@ -1,7 +1,7 @@
 import pygame
 import sys
 from time import sleep
-from random import randint
+from random import randint, choice
 
 from settings import Settings
 from snake import Snake
@@ -39,13 +39,17 @@ class SnakeGame():
 
                 # Move the last segments before the first one
                 self._update_snake_movement()
-            # Use sleep to control the movements of each segment
-                sleep(0.07)
-            # Move the first segment
+                # Use sleep to control the movements of each segment
+                self._game_level()
+                # Move the first segment
                 self.first_segment.move()
-                self._game_over()
+                self._level_up()
+
                 self.score_board.prep_scoreboard()
                 self.score_board.prep_best_score()
+
+                self._game_over()
+
             self._update_screen()
 
     def _check_key_events(self):
@@ -113,6 +117,8 @@ class SnakeGame():
         if not self.food.is_exist:
             self.food.x = randint(10, self.screen_rect.width - 10)
             self.food.y = randint(10, self.screen_rect.height - 10)
+            self.food.color = (randint(40, 255), randint(
+                0, 255), randint(20, 255))
         self.food.draw_food()
 
     def _update_screen(self):
@@ -150,7 +156,6 @@ class SnakeGame():
             # Update Score
             self._update_score()
 
-    # TODO: Game over
     def _game_over(self):
         # Collision with the border
         has_collision_borders = self._has_collision_borders()
@@ -159,7 +164,7 @@ class SnakeGame():
 
         has_collision_segments = self._has_collision_segments()
 
-        # TODO: Game over
+        # Game over
         if has_collision_borders or has_collision_segments:
             self.game_stats.game_active = False
             self.game_stats._update_best_score()
@@ -181,6 +186,21 @@ class SnakeGame():
         if pygame.sprite.spritecollideany(self.first_segment, segments):
             return True
         return False
+
+    def _level_up(self):
+        if self.game_stats.score == 3:
+
+            self.game_stats.level = 2
+        elif self.game_stats.score == 6:
+            self.game_stats.level = 3
+        elif self.game_stats.score == 9:
+            self.game_stats.level = 4
+        elif self.game_stats.score == 12:
+            self.game_stats.level = 5
+
+    def _game_level(self):
+        keyword = 'level' + str(self.game_stats.level)
+        sleep(self.settings.levels[keyword])
 
 
 if __name__ == '__main__':
