@@ -11,7 +11,6 @@ class Snake(Sprite):
         self.settings = snake_game.settings
         self.screen = snake_game.screen
         self.screen_rect = self.screen.get_rect()
-        print(self.screen_rect.bottom)
         self.rect = pygame.Rect(
             0, 0, self.settings.segment_width, self.settings.segment_height)
 

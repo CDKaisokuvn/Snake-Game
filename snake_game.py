@@ -1,8 +1,11 @@
+from tkinter import Y
 import pygame
 import sys
 from time import sleep
 from settings import Settings
 from snake import Snake
+from food import Food
+from random import randint
 
 
 class SnakeGame():
@@ -22,11 +25,13 @@ class SnakeGame():
         pygame.display.set_caption('Snake Game')
 
         self._initialize_snake()
+        self.food = Food(self)
 
     def run_game(self):
         """Start the main loop for the game"""
         while True:
             self._check_key_events()
+
             # Move the last segments before the first one
             self._update_snake_movement()
             # Use sleep to control the movements of each segment
@@ -80,22 +85,30 @@ class SnakeGame():
                     i-1].rect.y
 
     def _update_snake_movement(self):
-
+        """Moving the snake"""
         segments = self.snake.sprites()
         segments.reverse()
-        
+
         for i in range(len(segments)):
             if i < len(segments) - 1:
                 segments[i].rect.centerx = segments[i+1].rect.centerx
                 segments[i].rect.centery = segments[i+1].rect.centery
+
+    def _update_food(self):
+        """Random a position for food"""
+        if not self.food.is_exist:
+            self.food.x = randint(10, self.screen_rect.width)
+            self.food.y = randint(10, self.screen_rect.height)
+        self.food.draw_food()
 
     def _update_screen(self):
         """Update images on the screen."""
         self.screen.fill(self.settings.bg_color)
         for segment in self.snake.sprites():
             segment.draw_segments()
-
-        pygame.display.flip()
+        self._update_food()
+        pygame.display.update()
+        # pygame.display.flip()
 
 
 if __name__ == '__main__':
